@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Brand Design</title>
-  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --spacing-unit: 8px;
@@ -20,47 +20,84 @@
       max-width: 1184px;
       margin-left: auto;
       margin-right: auto;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
     h1 {
-      font-size: 2.2rem;
+      font-size: 2.4rem;
       margin-bottom: 0.25em;
     }
     h2 {
       font-size: 1.2rem;
       color: #555;
       margin-top: 0;
+      margin-bottom: 32px;
     }
     .filters {
-      margin: calc(var(--spacing-unit) * 2) 0;
+      margin-bottom: 24px;
     }
     .filters label {
-      margin-right: calc(var(--spacing-unit) * 3);
-      font-size: 1rem;
+      margin-right: 24px;
       cursor: pointer;
+      font-size: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
     }
     .filters input[type="checkbox"] {
-      margin-right: 6px;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      border: 2px solid #ccc;
+      position: relative;
+      cursor: pointer;
     }
+    .filters input[type="checkbox"]::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-color: transparent;
+      border-radius: 1px;
+      transition: background-color 0.2s ease;
+    }
+    .filters input[type="checkbox"]:checked::before {
+      background-color: currentColor;
+    }
+
+    .filters input[value="service"] { color: #940ED6; border-color: #940ED6; }
+    .filters input[value="product"] { color: #FF5B16; border-color: #FF5B16; }
+    .filters input[value="method"] { color: #2CFDFE; border-color: #2CFDFE; }
+
     .table {
       display: grid;
       grid-template-columns: repeat(8, 1fr);
       gap: 16px;
     }
     .element {
-      padding: 16px;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
       position: relative;
+      border-radius: 8px;
+      padding: 16px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      cursor: default;
       aspect-ratio: 1 / 1;
-      transition: transform 0.2s ease;
     }
     .element:hover {
       transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
       z-index: 5;
     }
+    .element[data-type="service"] { background-color: var(--service-bg); border: 1px solid #940ED6; }
+    .element[data-type="product"] { background-color: var(--product-bg); border: 1px solid #FF5B16; }
+    .element[data-type="method"] { background-color: var(--method-bg); border: 1px solid #2CFDFE; }
+    .element.faded { opacity: 0.2; }
+
+    .tooltip-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
     .abbr {
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       font-weight: bold;
       text-align: left;
     }
@@ -76,60 +113,126 @@
       top: 100%;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(255,255,255,0.9);
+      width: 428px;
+      height: 280px;
+      padding: 24px;
+      border-radius: 16px;
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
-      padding: 16px;
-      border-radius: 12px;
-      width: 360px;
-      z-index: 10;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+      background-color: rgba(255,255,255,0.85);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      z-index: 99;
+      transition: opacity 0.3s ease;
       font-size: 0.85rem;
-      transition: opacity 0.2s ease;
     }
-    .element:hover .tooltip {
+    .tooltip p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: var(--tooltip-text);
+    }
+    .tooltip .read-more {
+      text-decoration: underline;
+      color: var(--tooltip-text);
+      margin-top: 12px;
+      font-size: 0.85rem;
+    }
+    .element:hover .tooltip,
+    .tooltip:hover {
       visibility: visible;
       opacity: 1;
     }
-    .read-more {
-      margin-top: 8px;
-      display: inline-block;
-      text-decoration: underline;
-      color: #0A0700;
+
+    #toggleMode {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 10000;
     }
-    @media (max-width: 1024px) {
-      .table { grid-template-columns: repeat(4, 1fr); }
+
+    body.dark-mode {
+      background-color: #0A0700;
+      color: #f7f7f7;
     }
-    @media (max-width: 600px) {
-      .table { grid-template-columns: repeat(2, 1fr); }
+    body.dark-mode .element[data-type="service"] { background-color: #1E032B; }
+    body.dark-mode .element[data-type="product"] { background-color: #260C00; }
+    body.dark-mode .element[data-type="method"] { background-color: #092828; }
+    body.dark-mode .tooltip,
+    body.dark-mode .tooltip .read-more,
+    body.dark-mode .tooltip p,
+    body.dark-mode .label {
+      color: #f7f7f7;
+      background-color: inherit;
     }
   </style>
 </head>
 <body>
+  <button id="toggleMode" aria-label="Toggle dark mode">🌞</button>
   <h1>Brand Design</h1>
   <h2>Crafting identity and narrative</h2>
+  <div class="filters">
+    <label><input type="checkbox" class="filter" value="service" checked> Services</label>
+    <label><input type="checkbox" class="filter" value="product" checked> Products</label>
+    <label><input type="checkbox" class="filter" value="method" checked> Methods</label>
+  </div>
   <div class="table" id="elementTable"></div>
+
   <script>
+    const toggleButton = document.getElementById('toggleMode');
+    const body = document.body;
+
+    if (localStorage.getItem('mode') === 'dark') {
+      body.classList.add('dark-mode');
+      toggleButton.textContent = '🌞';
+    }
+
+    toggleButton.addEventListener('click', () => {
+      body.classList.toggle('dark-mode');
+      const isDark = body.classList.contains('dark-mode');
+      toggleButton.textContent = isDark ? '🌞' : '🌚';
+      localStorage.setItem('mode', isDark ? 'dark' : 'light');
+    });
+
     fetch('data.json')
       .then(res => res.json())
       .then(data => {
-        const table = data.tables.find(t => t.id === "brand");
+        const table = data.tables.find(t => t.id === 'brand');
         const container = document.getElementById('elementTable');
         if (table) {
           table.items.forEach(item => {
             const el = document.createElement('div');
             el.className = 'element';
+            el.setAttribute("data-type", item.type.toLowerCase());
             el.innerHTML = `
-              <div class="abbr">${item.abbr}</div>
-              <div class="label">${item.label} (${item.type})</div>
-              <div class="tooltip">
-                <p>${item.text}</p>
-                ${item.link ? `<a href="${item.link}" target="_blank" class="read-more">Read more ↗︎</a>` : ''}
+              <div class="tooltip-wrapper">
+                <div class="abbr">${item.abbr}</div>
+                <div class="label">${item.label}</div>
+                <div class="tooltip">
+                  <p>${item.text}</p>
+                  ${item.link ? `<a href="${item.link}" target="_blank" class="read-more">Read more ↗︎</a>` : ''}
+                </div>
               </div>
             `;
             container.appendChild(el);
           });
         }
+
+        document.querySelectorAll('.filter').forEach(filter => {
+          filter.addEventListener('change', () => {
+            const active = Array.from(document.querySelectorAll('.filter'))
+              .filter(f => f.checked)
+              .map(f => f.value);
+            document.querySelectorAll('.element').forEach(el => {
+              el.classList.toggle('faded', !active.includes(el.getAttribute('data-type')));
+            });
+          });
+        });
       });
   </script>
 </body>
