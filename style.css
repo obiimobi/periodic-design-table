@@ -134,20 +134,11 @@ body {
   z-index: 99;
   transition: opacity 0.3s ease;
   font-size: 0.85rem;
-  border: 1px solid transparent;
 }
 
-.tooltip[data-type="filterone"] {
-  border-color: #940ED6!important;
-}
-
-.tooltip[data-type="filtertwo"] {
-  border-color: #FF5B16!important;
-}
-
-.tooltip[data-type="filterthree"] {
-  border-color: #2CFDFE!important;
-}
+.tooltip[data-type="filterone"] { border: 1px solid #940ED6!important;}
+.tooltip[data-type="filtertwo"] { border: 1px solid #FF5B16!important;}
+.tooltip[data-type="filterthree"] { border: 1px solid #2CFDFE!important;}
 
 .tooltip p {
   margin: 0;
