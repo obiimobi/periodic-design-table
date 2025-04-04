@@ -65,9 +65,9 @@ body {
   background-color: currentColor;
 }
 
-.filters input[value="service"] { color: #940ED6; border-color: #940ED6; }
-.filters input[value="product"] { color: #FF5B16; border-color: #FF5B16; }
-.filters input[value="method"] { color: #2CFDFE; border-color: #2CFDFE; }
+.filters input[value="filterone"] { color: #940ED6; border-color: #940ED6; }
+.filters input[value="filtertwo"] { color: #FF5B16; border-color: #FF5B16; }
+.filters input[value="filterthree"] { color: #2CFDFE; border-color: #2CFDFE; }
 
 .table {
   display: grid;
@@ -135,7 +135,7 @@ body {
   z-index: 99;
   transition: opacity 0.3s ease;
   font-size: 0.85rem;
-  border: 1px solid transparent; /* Border reset here */
+  border: 1px solid transparent;
 }
 
 .tooltip[data-type="filterone"] {
@@ -152,7 +152,7 @@ body {
 
 .tooltip p {
   margin: 0;
-  font-size: 1.6rem;
+  font-size: 0.85rem;
   color: var(--tooltip-text);
 }
 
@@ -160,7 +160,7 @@ body {
   text-decoration: underline;
   color: var(--tooltip-text);
   margin-top: 12px;
-  font-size: 1.2rem;
+  font-size: 0.85rem;
 }
 
 .element:hover .tooltip,
