@@ -152,7 +152,7 @@ body {
 
 .tooltip p {
   margin: 0;
-  font-size: 0.85rem;
+  font-size: 1.6rem;
   color: var(--tooltip-text);
 }
 
@@ -160,7 +160,7 @@ body {
   text-decoration: underline;
   color: var(--tooltip-text);
   margin-top: 12px;
-  font-size: 0.85rem;
+  font-size: 1.2rem;
 }
 
 .element:hover .tooltip,
