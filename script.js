@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
   const toggleButton = document.getElementById('toggleMode');
   const body = document.body;
@@ -30,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="tooltip-wrapper">
               <div class="abbr">${item.abbr}</div>
               <div class="label">${item.label}</div>
-              <div class="tooltip">
+              <div class="tooltip" data-type="${item.type}">
                 <p>${item.text}</p>
                 ${item.link ? `<a href="${item.link}" target="_blank" class="read-more">Read more ↗︎</a>` : ''}
               </div>
@@ -49,6 +50,13 @@ document.addEventListener('DOMContentLoaded', () => {
             .map(f => f.value);
           document.querySelectorAll('.element').forEach(el => {
             const type = el.getAttribute('data-type');
+            // Show tooltip only for non-faded elements
+            const tooltip = el.querySelector('.tooltip');
+            if (el.classList.contains('faded')) {
+              tooltip.style.visibility = 'hidden';  // Hide tooltip for faded elements
+            } else {
+              tooltip.style.visibility = 'visible'; // Show tooltip for non-faded elements
+            }
             el.classList.toggle('faded', !active.includes(type));
           });
         });
