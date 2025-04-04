@@ -24,7 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
         table.items.forEach(item => {
           const el = document.createElement('div');
           el.className = 'element';
-          el.setAttribute("data-type", item.type.toLowerCase());
+          el.setAttribute("data-type", item.type); // keep original case (e.g. "service")
+
           el.innerHTML = `
             <div class="tooltip-wrapper">
               <div class="abbr">${item.abbr}</div>
@@ -35,17 +36,20 @@ document.addEventListener('DOMContentLoaded', () => {
               </div>
             </div>
           `;
+
           container.appendChild(el);
         });
       }
 
+      // Now handle filters
       document.querySelectorAll('.filter').forEach(filter => {
         filter.addEventListener('change', () => {
           const active = Array.from(document.querySelectorAll('.filter'))
             .filter(f => f.checked)
             .map(f => f.value);
           document.querySelectorAll('.element').forEach(el => {
-            el.classList.toggle('faded', !active.includes(el.getAttribute('data-type')));
+            const type = el.getAttribute('data-type');
+            el.classList.toggle('faded', !active.includes(type));
           });
         });
       });
