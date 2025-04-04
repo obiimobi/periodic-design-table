@@ -204,3 +204,16 @@ body.dark-mode .filters input[type="checkbox"]::before {
 body.dark-mode .filters input[value="filterone"] { background-color: #940ED6; border: 2px solid #940ED6; }
 body.dark-mode .filters input[value="filtertwo"] { background-color: #FF5B16; border: 2px solid #FF5B16; }
 body.dark-mode .filters input[value="filterthree"]  { background-color: #2CFDFE; border: 2px solid #2CFDFE; }
+
+body .filters input[type="checkbox"]::before {
+  background-color: transparent;
+}
+body .filters input[value="filterone"]:checked::before {
+  background-color: #940ED6;
+}
+body .filters input[value="filtertwo"]:checked::before {
+  background-color: #FF5B16;
+}
+body .filters input[value="filterthree"]:checked::before {
+  background-color: #2CFDFE;
+}
