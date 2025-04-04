@@ -58,6 +58,24 @@ document.addEventListener('DOMContentLoaded', () => {
               tooltip.style.visibility = 'visible'; // Show tooltip for non-faded elements
             }
             el.classList.toggle('faded', !active.includes(type));
+
+            // Tooltip positioning fix: Avoid tooltip cut-off on the edges of the screen
+            const tooltipRect = tooltip.getBoundingClientRect();
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+
+            let tooltipLeft = tooltipRect.left;
+            let tooltipTop = tooltipRect.top;
+
+            if (tooltipLeft + tooltipRect.width > viewportWidth) {
+              tooltipLeft = viewportWidth - tooltipRect.width - 10; // Ensure tooltip stays within viewport
+            }
+            if (tooltipTop + tooltipRect.height > viewportHeight) {
+              tooltipTop = viewportHeight - tooltipRect.height - 10; // Ensure tooltip stays within viewport
+            }
+
+            tooltip.style.left = `${tooltipLeft}px`;
+            tooltip.style.top = `${tooltipTop}px`;
           });
         });
       });
