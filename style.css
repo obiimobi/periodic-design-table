@@ -1,0 +1,23 @@
+body {
+  font-family: 'Lato', sans-serif;
+  background: #f4f4f4;
+  color: #0A0700;
+  margin: 16px auto;
+  max-width: 1184px;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 8px;
+}
+
+.hero h2 {
+  font-size: 1.2rem;
+  font-weight: normal;
+  color: #666;
+}

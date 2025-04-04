@@ -1,0 +1,23 @@
+{
+  "tables": [
+    {
+      "id": "ux",
+      "title": "UX Design",
+      "filters": ["Research", "IA", "Interaction Design", "Visual Design"],
+      "items": [
+        {
+          "abbr": "UX",
+          "label": "User Experience",
+          "type": "Interaction Design",
+          "text": "Designing intuitive and engaging interactions."
+        },
+        {
+          "abbr": "IA",
+          "label": "Information Architecture",
+          "type": "IA",
+          "text": "Structuring content clearly."
+        }
+      ]
+    }
+  ]
+}
