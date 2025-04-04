@@ -116,9 +116,6 @@ body {
 .tooltip {
   visibility: hidden;
   opacity: 0;
-  position: absolute;
-  top: 100%;
-  left: 50%;
   transform: translateX(-50%);
   width: 428px;
   height: 280px;
