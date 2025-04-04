@@ -135,7 +135,7 @@ body {
   z-index: 99;
   transition: opacity 0.3s ease;
   font-size: 0.85rem;
-  border: 1px solid transparent;
+  border: 1px solid transparent; /* Border reset here */
 }
 
 .tooltip[data-type="filterone"] {
