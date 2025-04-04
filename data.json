@@ -14,16 +14,18 @@
         {
           "abbr": "UX",
           "label": "User Experience",
-          "type": "Interaction Design",
+          "type": "filterone",
           "text": "Designing intuitive and engaging interactions.",
-          "link": "https://example.com/ux"
+          "link": "https://example.com/ux",
+          "filterLabel": "Interaction Design"
         },
         {
           "abbr": "IA",
           "label": "Information Architecture",
-          "type": "IA",
+          "type": "filtertwo",
           "text": "Structuring content for clarity.",
-          "link": "https://example.com/ia"
+          "link": "https://example.com/ia",
+          "filterLabel": "IA"
         }
       ]
     },
@@ -40,16 +42,18 @@
         {
           "abbr": "BS",
           "label": "Brand Strategy",
-          "type": "Strategy",
+          "type": "filterthree",
           "text": "Defining what your brand stands for.",
-          "link": "https://example.com/brand-strategy"
+          "link": "https://example.com/brand-strategy",
+          "filterLabel": "Strategy"
         },
         {
           "abbr": "VI",
           "label": "Visual Identity",
-          "type": "Visual Identity",
+          "type": "filterone",
           "text": "Creating recognisable brand visuals.",
-          "link": "https://example.com/visual-identity"
+          "link": "https://example.com/visual-identity",
+          "filterLabel": "Visual Identity"
         }
       ]
     }
