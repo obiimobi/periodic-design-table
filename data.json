@@ -3,19 +3,53 @@
     {
       "id": "ux",
       "title": "UX Design",
-      "filters": ["Research", "IA", "Interaction Design", "Visual Design"],
+      "subtitle": "Designing with users in mind",
+      "filters": [
+        "Research",
+        "IA",
+        "Interaction Design",
+        "Visual Design"
+      ],
       "items": [
         {
           "abbr": "UX",
           "label": "User Experience",
           "type": "Interaction Design",
-          "text": "Designing intuitive and engaging interactions."
+          "text": "Designing intuitive and engaging interactions.",
+          "link": "https://example.com/ux"
         },
         {
           "abbr": "IA",
           "label": "Information Architecture",
           "type": "IA",
-          "text": "Structuring content clearly."
+          "text": "Structuring content for clarity.",
+          "link": "https://example.com/ia"
+        }
+      ]
+    },
+    {
+      "id": "brand",
+      "title": "Brand Design",
+      "subtitle": "Crafting identity and narrative",
+      "filters": [
+        "Strategy",
+        "Messaging",
+        "Visual Identity"
+      ],
+      "items": [
+        {
+          "abbr": "BS",
+          "label": "Brand Strategy",
+          "type": "Strategy",
+          "text": "Defining what your brand stands for.",
+          "link": "https://example.com/brand-strategy"
+        },
+        {
+          "abbr": "VI",
+          "label": "Visual Identity",
+          "type": "Visual Identity",
+          "text": "Creating recognisable brand visuals.",
+          "link": "https://example.com/visual-identity"
         }
       ]
     }
