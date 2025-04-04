@@ -44,8 +44,8 @@ body {
 
 .filters input[type="checkbox"] {
   appearance: none;
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   border-radius: 4px;
   border: 2px solid #ccc;
   position: relative;
@@ -57,7 +57,7 @@ body {
   position: absolute;
   inset: 0;
   background-color: transparent;
-  border-radius: 2px;
+  border-radius: 1px;
   transition: background-color 0.2s ease;
 }
 
@@ -65,9 +65,9 @@ body {
   background-color: currentColor;
 }
 
-.filters input[value="service"] { color: #940ED6; border-color: #940ED6; }
-.filters input[value="product"] { color: #FF5B16; border-color: #FF5B16; }
-.filters input[value="method"] { color: #2CFDFE; border-color: #2CFDFE; }
+.filters input[value="filterone"] { color: #940ED6; border-color: #940ED6; }
+.filters input[value="filtertwo"] { color: #FF5B16; border-color: #FF5B16; }
+.filters input[value="filterthree"] { color: #2CFDFE; border-color: #2CFDFE; }
 
 .table {
   display: grid;
@@ -82,7 +82,6 @@ body {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: default;
   aspect-ratio: 1 / 1;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .element:hover {
@@ -91,9 +90,9 @@ body {
   z-index: 5;
 }
 
-.element[data-type="service"] { background-color: var(--service-bg); border: 1px solid #940ED6; }
-.element[data-type="product"] { background-color: var(--product-bg); border: 1px solid #FF5B16; }
-.element[data-type="method"]  { background-color: var(--method-bg);  border: 1px solid #2CFDFE; }
+.element[data-type="filterone"] { background-color: var(--service-bg); border: 1px solid #940ED6; }
+.element[data-type="filtertwo"] { background-color: var(--product-bg); border: 1px solid #FF5B16; }
+.element[data-type="filterthree"]  { background-color: var(--method-bg);  border: 1px solid #2CFDFE; }
 .element.faded { opacity: 0.2; }
 
 .tooltip-wrapper {
@@ -172,9 +171,9 @@ body.dark-mode {
   color: #f7f7f7;
 }
 
-body.dark-mode .element[data-type="service"] { background-color: #1E032B; border-color: #940ED6; }
-body.dark-mode .element[data-type="product"] { background-color: #260C00; border-color: #FF5B16; }
-body.dark-mode .element[data-type="method"]  { background-color: #092828; border-color: #2CFDFE; }
+body.dark-mode .element[data-type="filterone"] { background-color: #1E032B; }
+body.dark-mode .element[data-type="filtertwo"] { background-color: #260C00; }
+body.dark-mode .element[data-type="filterthree"]  { background-color: #092828; }
 
 body.dark-mode .tooltip,
 body.dark-mode .tooltip .read-more,
@@ -183,11 +182,3 @@ body.dark-mode .label {
   color: #f7f7f7;
   background-color: inherit;
 }
-
-body.dark-mode .filters input[type="checkbox"]::before {
-  background-color: #1E032B;
-}
-
-body.dark-mode .filters input[value="service"] { background-color: #940ED6; border: 2px solid #940ED6; }
-body.dark-mode .filters input[value="product"] { background-color: #FF5B16; border: 2px solid #FF5B16; }
-body.dark-mode .filters input[value="method"]  { background-color: #2CFDFE; border: 2px solid #2CFDFE; }
