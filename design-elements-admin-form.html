@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create or Edit Design Elements</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Lato', sans-serif;
+      margin: 32px auto;
+      max-width: 720px;
+      padding: 0 16px;
+    }
+    h1, h2 {
+      font-weight: 700;
+    }
+    form {
+      display: grid;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    input, select, textarea {
+      padding: 8px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      padding: 10px 16px;
+      background: #0A0700;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .section-label {
+      margin-top: 24px;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+    .preview, .existing-tile {
+      padding: 16px;
+      margin-bottom: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #f9f9f9;
+    }
+    .preview .abbr, .existing-tile .abbr {
+      font-size: 1.6rem;
+      font-weight: bold;
+    }
+    .preview .label, .existing-tile .label {
+      font-size: 1rem;
+      color: #555;
+    }
+    .preview .text, .existing-tile .text {
+      font-size: 0.9rem;
+      margin-top: 8px;
+    }
+    .existing-tiles {
+      margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Manage Design Elements</h1>
+  <form id="tileForm">
+    <!-- Dynamic Page Selection -->
+    <div class="section-label">Select or Create Page</div>
+    <select name="pageSelector" id="pageSelector" required>
+      <option value="">Select Page</option>
+      <!-- Pages will be added dynamically -->
+    </select><br><br>
+
+    <input name="pageTitle" placeholder="Page Title (e.g., UX Design)" required />
+    <input name="pageSubtitle" placeholder="Page Subtitle (optional)" />
+
+    <div class="section-label">Filters (Types)</div>
+    <input name="newType" placeholder="Add a new filter (e.g., Research)" />
+    <select name="typeSelect" id="typeSelect">
+      <option value="">Select existing filter</option>
+    </select>
+
+    <div class="section-label">Element Details</div>
+    <input name="abbr" placeholder="Abbreviation (e.g., UX)" required />
+    <input name="label" placeholder="Label (e.g., User Experience)" required />
+    <textarea name="text" rows="3" placeholder="Tooltip text..." required></textarea>
+    <input name="link" placeholder="Read more link (optional)" />
+
+    <!-- Select an existing element to edit -->
+    <div class="section-label">Select Element to Edit</div>
+    <select id="elementSelector" name="elementSelector">
+      <option value="">Select an element</option>
+      <!-- Elements will be added dynamically -->
+    </select><br><br>
+
+    <button type="submit">Save Element</button>
+  </form>
+
+  <h2>Page Preview</h2>
+  <div id="pageInfo"></div>
+  <div id="previewContainer"></div>
+
+  <div class="section-label">Existing Elements</div>
+  <div class="existing-tiles" id="existingTiles"></div>
+
+  <script>
+    const form = document.getElementById('tileForm');
+    const pageSelector = document.getElementById('pageSelector');
+    const elementSelector = document.getElementById('elementSelector');
+    const pageInfo = document.getElementById('pageInfo');
+    const previewContainer = document.getElementById('previewContainer');
+    const existingTiles = document.getElementById('existingTiles');
+    const typeSelect = document.getElementById('typeSelect');
+
+    let filters = new Set();
+    let pages = [];
+    let elements = [];
+
+    // Load pages from Firestore
+    function loadPages() {
+      db.collection('pages').get().then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          const pageData = doc.data();
+          const option = document.createElement('option');
+          option.value = doc.id;
+          option.textContent = pageData.pageTitle;
+          pageSelector.appendChild(option);
+        });
+      });
+    }
+
+    // Load elements from Firestore
+    function loadElements() {
+      db.collection('designElements').get().then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          const elementData = doc.data();
+          const option = document.createElement('option');
+          option.value = doc.id;
+          option.textContent = elementData.abbr;
+          elementSelector.appendChild(option);
+        });
+      });
+    }
+
+    // Pre-fill form when element is selected for editing
+    elementSelector.addEventListener('change', (event) => {
+      const selectedElementId = event.target.value;
+      if (selectedElementId) {
+        db.collection('designElements').doc(selectedElementId).get().then(doc => {
+          const data = doc.data();
+          document.getElementById('abbr').value = data.abbr;
+          document.getElementById('label').value = data.label;
+          document.getElementById('typeSelect').value = data.type;
+          document.getElementById('text').value = data.tooltip;
+          document.getElementById('link').value = data.link || '';
+        });
+      }
+    });
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const data = new FormData(form);
+
+      const abbr = data.get('abbr').toUpperCase();
+      const label = data.get('label');
+      const tooltip = data.get('text');
+      const link = data.get('link');
+      const pageTitle = data.get('pageTitle');
+      const pageSubtitle = data.get('pageSubtitle');
+      const newType = data.get('newType');
+      const selectedType = data.get('typeSelect');
+      const type = newType || selectedType;
+
+      if (!type) {
+        alert('Please provide or select a filter (type).');
+        return;
+      }
+
+      // Create new type if it doesn't exist
+      if (newType && !filters.has(newType)) {
+        filters.add(newType);
+        const option = document.createElement('option');
+        option.value = newType;
+        option.textContent = newType;
+        typeSelect.appendChild(option);
+      }
+
+      // Create a page if not already created
+      if (pageTitle && !pageInfo.hasChildNodes()) {
+        const h1 = document.createElement('h1');
+        h1.textContent = pageTitle;
+        pageInfo.appendChild(h1);
+        if (pageSubtitle) {
+          const h2 = document.createElement('h2');
+          h2.textContent = pageSubtitle;
+          pageInfo.appendChild(h2);
+        }
+      }
+
+      // Save to Firestore
+      const tileData = { abbr, label, type, tooltip, link };
+      elements.push(tileData);
+
+      // Add tile to preview
+      const el = document.createElement('div');
+      el.className = 'preview';
+      el.innerHTML = `
+        <div class="abbr">${abbr}</div>
+        <div class="label">${label} (${type})</div>
+        <div class="text">${tooltip}</div>
+        ${link ? `<a href="${link}" target="_blank">Read more ↗︎</a>` : ''}
+      `;
+      previewContainer.appendChild(el);
+      const existing = document.createElement('div');
+      existing.className = 'existing-tile';
+      existing.innerHTML = `
+        <div class="abbr">${abbr}</div>
+        <div class="label">${label} (${type})</div>
+        <div class="text">${tooltip}</div>
+        ${link ? `<a href="${link}" target="_blank">Read more ↗︎</a>` : ''}
+      `;
+      existingTiles.appendChild(existing);
+
+      // Reset the form after submission
+      form.reset();
+    });
+
+    // Load Pages and Elements on Page Load
+    loadPages();
+    loadElements();
+  </script>
+</body>
+</html>
