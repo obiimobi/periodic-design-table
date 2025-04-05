@@ -61,6 +61,31 @@
     <h1>Periodic Design Table</h1>
     <p>An interactive way to explore disciplines, methods and tools</p>
   </header>
+
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyDjD5OquKymNs27ObbEELux9cPEzIndGUI",
+    authDomain: "design-elements-f3448.firebaseapp.com",
+    projectId: "design-elements-f3448",
+    storageBucket: "design-elements-f3448.firebasestorage.app",
+    messagingSenderId: "81965502008",
+    appId: "1:81965502008:web:9bfde1d9719db04a7420cd",
+    measurementId: "G-2YJ4V8N8M7"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
+  
   <main>
     <a class="button" href="design-explorer.html">Launch Design Explorer ↗︎</a>
   </main>
