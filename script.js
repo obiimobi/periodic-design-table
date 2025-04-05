@@ -33,6 +33,11 @@ const db = firebase.firestore();
 const pageSelector = document.getElementById('pageSelector');
 const newPageFields = document.getElementById('newPageFields');
 
+console.log(document.getElementById('designElementForm')); // Check if the form is found
+form.addEventListener('submit', (e) => {
+  // Your code here...
+});
+
 // Show new page fields if "Create New Page" is selected
 pageSelector.addEventListener('change', (e) => {
   const selectedPage = e.target.value;
