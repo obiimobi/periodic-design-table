@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
         table.items.forEach(item => {
           const el = document.createElement('div');
           el.className = 'element';
-          el.setAttribute("data-type", item.type);
+          el.setAttribute("data-type", item.type); // keep original case (e.g. "service")
 
           el.innerHTML = `
             <div class="tooltip-wrapper">
@@ -37,11 +37,12 @@ document.addEventListener('DOMContentLoaded', () => {
               </div>
             </div>
           `;
+
           container.appendChild(el);
         });
       }
 
-      // Filter functionality
+      // Now handle filters
       document.querySelectorAll('.filter').forEach(filter => {
         filter.addEventListener('change', () => {
           const active = Array.from(document.querySelectorAll('.filter'))
@@ -49,33 +50,14 @@ document.addEventListener('DOMContentLoaded', () => {
             .map(f => f.value);
           document.querySelectorAll('.element').forEach(el => {
             const type = el.getAttribute('data-type');
-            // Hide tooltip for faded elements (non-visible)
+            // Show tooltip only for non-faded elements
             const tooltip = el.querySelector('.tooltip');
             if (el.classList.contains('faded')) {
-              tooltip.style.visibility = 'hidden';
+              tooltip.style.visibility = 'hidden';  // Hide tooltip for faded elements
             } else {
-              tooltip.style.visibility = 'visible';
+              tooltip.style.visibility = 'visible'; // Show tooltip for non-faded elements
             }
             el.classList.toggle('faded', !active.includes(type));
-
-            // Tooltip positioning fix: Avoid cut-off at edges without affecting the layout
-            const tooltipRect = tooltip.getBoundingClientRect();
-            const viewportWidth = window.innerWidth;
-            const viewportHeight = window.innerHeight;
-
-            let tooltipLeft = tooltipRect.left;
-            let tooltipTop = tooltipRect.top;
-
-            // Ensure tooltip stays within the viewport bounds
-            if (tooltipLeft + tooltipRect.width > viewportWidth) {
-              tooltipLeft = viewportWidth - tooltipRect.width - 10;
-            }
-            if (tooltipTop + tooltipRect.height > viewportHeight) {
-              tooltipTop = viewportHeight - tooltipRect.height - 10;
-            }
-
-            tooltip.style.left = `${tooltipLeft}px`;
-            tooltip.style.top = `${tooltipTop}px`;
           });
         });
       });
