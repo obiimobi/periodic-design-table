@@ -12,6 +12,16 @@ const filters = new Set();
 let elements = [];
 
 // Show new page fields if "Create New Page" is selected
+document.addEventListener('DOMContentLoaded', () => {
+  const selectedPage = pageSelector.value;
+  if (selectedPage === 'createNewPage') {
+    newPageFields.style.display = 'block'; // Show the new page fields
+  } else {
+    newPageFields.style.display = 'none'; // Hide the new page fields
+  }
+});
+
+// Toggle visibility of new page fields when page selection changes
 pageSelector.addEventListener('change', (e) => {
   const selectedPage = e.target.value;
   if (selectedPage === 'createNewPage') {
