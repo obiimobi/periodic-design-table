@@ -50,6 +50,7 @@ pageSelector.addEventListener('change', (e) => {
 // Handle form submission
 form.addEventListener('submit', (e) => {
   e.preventDefault();
+
   const data = new FormData(form);
 
   const abbr = data.get('abbr').toUpperCase();
@@ -61,17 +62,20 @@ form.addEventListener('submit', (e) => {
   const newType = data.get('newType');
   const selectedType = data.get('typeSelect');
   const type = newType || selectedType;
-  
+
   // Ensure category (type) is selected
   if (!type) {
     alert('Please provide or select a filter (type).');
     return;
   }
 
-  // Handle page creation
   let selectedPageId = pageSelector.value;
+  
+  // Show a loading indicator while creating a page (optional)
+  document.getElementById("loadingMessage").style.display = "block"; // Show the loading message
+  
+  // Handle page creation
   if (selectedPageId === 'createNewPage') {
-    // Create a new page
     const newPageTitle = data.get('newPageTitle');
     const newPageSubtitle = data.get('newPageSubtitle');
 
@@ -83,9 +87,12 @@ form.addEventListener('submit', (e) => {
     .then(docRef => {
       selectedPageId = docRef.id;
       alert('New page created successfully!');
+      document.getElementById("loadingMessage").style.display = "none"; // Hide the loading message
     })
     .catch((error) => {
       console.error('Error adding page: ', error);
+      alert('Error creating new page!');
+      document.getElementById("loadingMessage").style.display = "none"; // Hide the loading message
     });
   }
 
@@ -102,12 +109,14 @@ form.addEventListener('submit', (e) => {
       link: link || null
     })
     .then(() => {
-      alert('Design element updated!');
+      alert('Design element updated successfully!');
       form.reset();
+      document.getElementById("loadingMessage").style.display = "none"; // Hide the loading message
     })
     .catch((error) => {
       console.error('Error updating element: ', error);
       alert('Error updating design element.');
+      document.getElementById("loadingMessage").style.display = "none"; // Hide the loading message
     });
   } else {
     // Add a new element
@@ -123,15 +132,24 @@ form.addEventListener('submit', (e) => {
       pageId: selectedPageId // Add reference to the selected page
     })
     .then(() => {
-      alert('Design element added!');
+      alert('Design element added successfully!');
       form.reset();
+      document.getElementById("loadingMessage").style.display = "none"; // Hide the loading message
     })
     .catch((error) => {
       console.error('Error adding element: ', error);
       alert('Error adding design element.');
+      document.getElementById("loadingMessage").style.display = "none"; // Hide the loading message
     });
   }
 });
+
+
+
+
+
+
+
 
 // Load pages and elements on page load
 loadPages();
