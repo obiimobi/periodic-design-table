@@ -1,4 +1,7 @@
 
+/* CSS File - Updated (Version: 2023-10-11) */
+
+/* Root Variables */
 :root {
   --spacing-unit: 8px;
   --tooltip-text: #0A0700;
@@ -17,6 +20,7 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* Hero Section (for page title) */
 .hero h1 {
   font-size: 2.4rem;
   margin-bottom: 0.25em;
@@ -28,6 +32,7 @@ body {
   margin-bottom: 32px;
 }
 
+/* Filter Section Styling */
 .filters {
   margin-bottom: 24px;
 }
@@ -68,6 +73,7 @@ body {
 .filters input[value="filtertwo"] { color: #FF5B16; border-color: #FF5B16; }
 .filters input[value="filterthree"] { color: #2CFDFE; border-color: #2CFDFE; }
 
+/* Table Layout */
 .table {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
@@ -83,20 +89,16 @@ body {
   aspect-ratio: 1 / 1;
   max-width: 128px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  /* Ensure element maintains square shape without affecting layout */
 }
 
+/* Hover Effects for Tiles */
 .element:hover {
   transform: translateY(-4px);
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   z-index: 5;
 }
 
-.element[data-type="filterone"] { background-color: var(--service-bg); border: 1px solid #940ED6; }
-.element[data-type="filtertwo"] { background-color: var(--product-bg); border: 1px solid #FF5B16; }
-.element[data-type="filterthree"]  { background-color: var(--method-bg);  border: 1px solid #2CFDFE; }
-.element.faded { opacity: 0.2; pointer-events: none; }
-
+/* Tooltip Styling */
 .tooltip-wrapper {
   position: relative;
   width: 100%;
@@ -152,12 +154,14 @@ body {
   font-size: 1.2rem;
 }
 
+/* Tooltip Visibility on Hover */
 .element:hover .tooltip,
 .tooltip:hover {
   visibility: visible;
   opacity: 1;
 }
 
+/* Dark Mode Styling */
 #toggleMode {
   position: fixed;
   top: 16px;
@@ -201,12 +205,75 @@ body.dark-mode .filters input[value="filterthree"]  { background-color: #2CFDFE;
 body .filters input[type="checkbox"]::before {
   background-color: transparent;
 }
+
 body .filters input[value="filterone"]:checked::before {
   background-color: #940ED6;
 }
+
 body .filters input[value="filtertwo"]:checked::before {
   background-color: #FF5B16;
 }
+
 body .filters input[value="filterthree"]:checked::before {
   background-color: #2CFDFE;
 }
+  </style>
+</head>
+<body>
+  <h1>Manage Design Elements</h1>
+
+  <form id="designElementForm">
+  <!-- Page Selection or Creation -->
+  <div class="section-label">Select or Create Page</div>
+  <select name="pageSelector" id="pageSelector" required>
+    <option value="">Select Page</option>
+    <option value="createNewPage">Create New Page</option>
+    <!-- Dynamic pages will be added here -->
+  </select><br><br>
+
+  <!-- If "Create New Page" is selected, show the title and subtitle fields -->
+  <div id="newPageFields" style="display: none;">
+    <input name="newPageTitle" placeholder="New Page Title (e.g., UX Design)" required /><br><br>
+    <input name="newPageSubtitle" placeholder="New Page Subtitle (optional)" /><br><br>
+  </div>
+
+  <input name="pageTitle" placeholder="Page Title (e.g., UX Design)" required />
+  <input name="pageSubtitle" placeholder="Page Subtitle (optional)" /><br><br>
+
+  <div class="section-label">Filters (Types)</div>
+  <input name="newType" placeholder="Add a new filter (e.g., Research)" />
+  <select name="typeSelect" id="typeSelect">
+    <option value="">Select existing filter</option>
+  </select>
+
+  <div class="section-label">Element Details</div>
+  <input name="abbr" placeholder="Abbreviation (e.g., UX)" required />
+  <input name="label" placeholder="Label (e.g., User Experience)" required />
+  <textarea name="text" rows="3" placeholder="Tooltip text..." required></textarea>
+  <input name="link" placeholder="Read more link (optional)" />
+
+  <!-- Select an existing element to edit -->
+  <div class="section-label">Select Element to Edit</div>
+  <select id="elementSelector" name="elementSelector">
+    <option value="">Select an element</option>
+    <!-- Elements will be added dynamically -->
+  </select><br><br>
+
+  <button type="submit">Save Element</button>
+</form>
+
+<div id="loadingMessage" style="display:none;">Submitting your data... Please wait.</div>
+
+<h2>Page Preview</h2>
+<div id="pageInfo"></div>
+<div id="previewContainer"></div>
+
+<div class="section-label">Existing Elements</div>
+<div class="existing-tiles" id="existingTiles"></div>
+
+<script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>

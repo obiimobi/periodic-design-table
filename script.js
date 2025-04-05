@@ -1,19 +1,7 @@
 
-// Firebase Config and Initialization
-const firebaseConfig = {
-  apiKey: "AIzaSyDjD5OquKymNs27ObbEELux9cPEzIndGUI",
-  authDomain: "design-elements-f3448.firebaseapp.com",
-  projectId: "design-elements-f3448",
-  storageBucket: "design-elements-f3448.firebasestorage.app",
-  messagingSenderId: "81965502008",
-  appId: "1:81965502008:web:9bfde1d9719db04a7420cd",
-};
+// JavaScript File - Updated (Version: 2023-10-11)
 
-// Initialize Firebase
-const app = firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore(app);
-
-// Handle page selection and form submission
+// Initialize necessary DOM elements
 const pageSelector = document.getElementById('pageSelector');
 const newPageFields = document.getElementById('newPageFields');
 const form = document.getElementById('designElementForm');
@@ -22,32 +10,6 @@ const previewContainer = document.getElementById('previewContainer');
 const elementSelector = document.getElementById('elementSelector');
 const filters = new Set();
 let elements = [];
-
-// Load pages from Firestore
-function loadPages() {
-  db.collection('pages').get().then(querySnapshot => {
-    querySnapshot.forEach(doc => {
-      const pageData = doc.data();
-      const option = document.createElement('option');
-      option.value = doc.id;
-      option.textContent = pageData.pageTitle;
-      pageSelector.appendChild(option);
-    });
-  });
-}
-
-// Load elements from Firestore
-function loadElements() {
-  db.collection('designElements').get().then(querySnapshot => {
-    querySnapshot.forEach(doc => {
-      const elementData = doc.data();
-      const option = document.createElement('option');
-      option.value = doc.id;
-      option.textContent = elementData.abbr;
-      elementSelector.appendChild(option);
-    });
-  });
-}
 
 // Show new page fields if "Create New Page" is selected
 pageSelector.addEventListener('change', (e) => {
@@ -59,7 +21,37 @@ pageSelector.addEventListener('change', (e) => {
   }
 });
 
-// Handle form submission
+// Load Pages (dummy data, replace with real database interaction later)
+function loadPages() {
+  const dummyPages = [
+    { id: 1, pageTitle: 'UX Design' },
+    { id: 2, pageTitle: 'UI Design' }
+  ];
+  
+  dummyPages.forEach(page => {
+    const option = document.createElement('option');
+    option.value = page.id;
+    option.textContent = page.pageTitle;
+    pageSelector.appendChild(option);
+  });
+}
+
+// Load Elements (dummy data, replace with real database interaction later)
+function loadElements() {
+  const dummyElements = [
+    { abbr: 'UX', label: 'User Experience' },
+    { abbr: 'UI', label: 'User Interface' }
+  ];
+  
+  dummyElements.forEach(element => {
+    const option = document.createElement('option');
+    option.value = element.abbr;
+    option.textContent = element.abbr;
+    elementSelector.appendChild(option);
+  });
+}
+
+// Handle form submission (dummy implementation)
 form.addEventListener('submit', (e) => {
   e.preventDefault();
   const data = new FormData(form);
@@ -100,10 +92,6 @@ form.addEventListener('submit', (e) => {
     }
   }
 
-  // Save to Firestore
-  const tileData = { abbr, label, type, tooltip, link };
-  elements.push(tileData);
-
   // Add tile to preview
   const el = document.createElement('div');
   el.className = 'preview';
@@ -115,7 +103,7 @@ form.addEventListener('submit', (e) => {
   `;
   previewContainer.appendChild(el);
 
-  // Add tile to the existing elements
+  // Add tile to the existing elements section (for visual display)
   const existing = document.createElement('div');
   existing.className = 'existing-tile';
   existing.innerHTML = `
