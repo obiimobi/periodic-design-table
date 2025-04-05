@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -107,146 +108,128 @@
   <button type="submit">Save Element</button>
 </form>
 
-
-
-
-  
-  <!-- Add this where appropriate in your form HTML -->
 <div id="loadingMessage" style="display:none;">Submitting your data... Please wait.</div>
 
-  
-  <h2>Page Preview</h2>
-  <div id="pageInfo"></div>
-  <div id="previewContainer"></div>
+<h2>Page Preview</h2>
+<div id="pageInfo"></div>
+<div id="previewContainer"></div>
 
-  <div class="section-label">Existing Elements</div>
-  <div class="existing-tiles" id="existingTiles"></div>
+<div class="section-label">Existing Elements</div>
+<div class="existing-tiles" id="existingTiles"></div>
 
-  <script>
-    const form = document.getElementById('tileForm');
-    const pageSelector = document.getElementById('pageSelector');
-    const elementSelector = document.getElementById('elementSelector');
-    const pageInfo = document.getElementById('pageInfo');
-    const previewContainer = document.getElementById('previewContainer');
-    const existingTiles = document.getElementById('existingTiles');
-    const typeSelect = document.getElementById('typeSelect');
+<script>
+// Firebase Config and Initialization
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT_ID.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID",
+};
 
-    let filters = new Set();
-    let pages = [];
-    let elements = [];
+// Initialize Firebase
+const app = firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore(app);
 
-    // Load pages from Firestore
-    function loadPages() {
-      db.collection('pages').get().then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          const pageData = doc.data();
-          const option = document.createElement('option');
-          option.value = doc.id;
-          option.textContent = pageData.pageTitle;
-          pageSelector.appendChild(option);
-        });
-      });
-    }
-
-    // Load elements from Firestore
-    function loadElements() {
-      db.collection('designElements').get().then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          const elementData = doc.data();
-          const option = document.createElement('option');
-          option.value = doc.id;
-          option.textContent = elementData.abbr;
-          elementSelector.appendChild(option);
-        });
-      });
-    }
-
-    // Pre-fill form when element is selected for editing
-    elementSelector.addEventListener('change', (event) => {
-      const selectedElementId = event.target.value;
-      if (selectedElementId) {
-        db.collection('designElements').doc(selectedElementId).get().then(doc => {
-          const data = doc.data();
-          document.getElementById('abbr').value = data.abbr;
-          document.getElementById('label').value = data.label;
-          document.getElementById('typeSelect').value = data.type;
-          document.getElementById('text').value = data.tooltip;
-          document.getElementById('link').value = data.link || '';
-        });
-      }
+// Load pages from Firestore
+function loadPages() {
+  db.collection('pages').get().then(querySnapshot => {
+    querySnapshot.forEach(doc => {
+      const pageData = doc.data();
+      const option = document.createElement('option');
+      option.value = doc.id;
+      option.textContent = pageData.pageTitle;
+      pageSelector.appendChild(option);
     });
+  });
+}
 
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      const data = new FormData(form);
-
-      const abbr = data.get('abbr').toUpperCase();
-      const label = data.get('label');
-      const tooltip = data.get('text');
-      const link = data.get('link');
-      const pageTitle = data.get('pageTitle');
-      const pageSubtitle = data.get('pageSubtitle');
-      const newType = data.get('newType');
-      const selectedType = data.get('typeSelect');
-      const type = newType || selectedType;
-
-      if (!type) {
-        alert('Please provide or select a filter (type).');
-        return;
-      }
-
-      // Create new type if it doesn't exist
-      if (newType && !filters.has(newType)) {
-        filters.add(newType);
-        const option = document.createElement('option');
-        option.value = newType;
-        option.textContent = newType;
-        typeSelect.appendChild(option);
-      }
-
-      // Create a page if not already created
-      if (pageTitle && !pageInfo.hasChildNodes()) {
-        const h1 = document.createElement('h1');
-        h1.textContent = pageTitle;
-        pageInfo.appendChild(h1);
-        if (pageSubtitle) {
-          const h2 = document.createElement('h2');
-          h2.textContent = pageSubtitle;
-          pageInfo.appendChild(h2);
-        }
-      }
-
-      // Save to Firestore
-      const tileData = { abbr, label, type, tooltip, link };
-      elements.push(tileData);
-
-      // Add tile to preview
-      const el = document.createElement('div');
-      el.className = 'preview';
-      el.innerHTML = `
-        <div class="abbr">${abbr}</div>
-        <div class="label">${label} (${type})</div>
-        <div class="text">${tooltip}</div>
-        ${link ? `<a href="${link}" target="_blank">Read more ↗︎</a>` : ''}
-      `;
-      previewContainer.appendChild(el);
-      const existing = document.createElement('div');
-      existing.className = 'existing-tile';
-      existing.innerHTML = `
-        <div class="abbr">${abbr}</div>
-        <div class="label">${label} (${type})</div>
-        <div class="text">${tooltip}</div>
-        ${link ? `<a href="${link}" target="_blank">Read more ↗︎</a>` : ''}
-      `;
-      existingTiles.appendChild(existing);
-
-      // Reset the form after submission
-      form.reset();
+// Load elements from Firestore
+function loadElements() {
+  db.collection('designElements').get().then(querySnapshot => {
+    querySnapshot.forEach(doc => {
+      const elementData = doc.data();
+      const option = document.createElement('option');
+      option.value = doc.id;
+      option.textContent = elementData.abbr;
+      elementSelector.appendChild(option);
     });
+  });
+}
 
-    // Load Pages and Elements on Page Load
-    loadPages();
-    loadElements();
-  </script>
+// Handle form submission
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const data = new FormData(form);
+
+  const abbr = data.get('abbr').toUpperCase();
+  const label = data.get('label');
+  const tooltip = data.get('text');
+  const link = data.get('link');
+  const pageTitle = data.get('pageTitle');
+  const pageSubtitle = data.get('pageSubtitle');
+  const newType = data.get('newType');
+  const selectedType = data.get('typeSelect');
+  const type = newType || selectedType;
+
+  if (!type) {
+    alert('Please provide or select a filter (type).');
+    return;
+  }
+
+  // Create new type if it doesn't exist
+  if (newType && !filters.has(newType)) {
+    filters.add(newType);
+    const option = document.createElement('option');
+    option.value = newType;
+    option.textContent = newType;
+    typeSelect.appendChild(option);
+  }
+
+  // Handle page creation
+  if (pageTitle && !pageInfo.hasChildNodes()) {
+    const h1 = document.createElement('h1');
+    h1.textContent = pageTitle;
+    pageInfo.appendChild(h1);
+    if (pageSubtitle) {
+      const h2 = document.createElement('h2');
+      h2.textContent = pageSubtitle;
+      pageInfo.appendChild(h2);
+    }
+  }
+
+  // Save to Firestore
+  const tileData = { abbr, label, type, tooltip, link };
+  elements.push(tileData);
+
+  // Add tile to preview
+  const el = document.createElement('div');
+  el.className = 'preview';
+  el.innerHTML = `
+    <div class="abbr">${abbr}</div>
+    <div class="label">${label} (${type})</div>
+    <div class="text">${tooltip}</div>
+    ${link ? `<a href="${link}" target="_blank">Read more ↗︎</a>` : ''}
+  `;
+  previewContainer.appendChild(el);
+  const existing = document.createElement('div');
+  existing.className = 'existing-tile';
+  existing.innerHTML = `
+    <div class="abbr">${abbr}</div>
+    <div class="label">${label} (${type})</div>
+    <div class="text">${tooltip}</div>
+    ${link ? `<a href="${link}" target="_blank">Read more ↗︎</a>` : ''}
+  `;
+  existingTiles.appendChild(existing);
+
+  // Reset the form after submission
+  form.reset();
+});
+
+// Load Pages and Elements on Page Load
+loadPages();
+loadElements();
+</script>
 </body>
 </html>
