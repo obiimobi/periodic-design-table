@@ -26,39 +26,32 @@ function loadPages() {
   });
 }
 
-// Load Design Elements into Element Selector
-function loadElements() {
-  db.collection('designElements').get().then(querySnapshot => {
-    querySnapshot.forEach(doc => {
-      const elementData = doc.data();
-      const option = document.createElement('option');
-      option.value = doc.id;
-      option.textContent = elementData.abbr;
-      elementSelector.appendChild(option);
-    });
-  });
-}
+// Firebase Firestore setup
+const db = firebase.firestore();
 
-// Pre-fill form when element is selected for editing
-elementSelector.addEventListener('change', (event) => {
-  const selectedElementId = event.target.value;
-  if (selectedElementId) {
-    db.collection('designElements').doc(selectedElementId).get().then(doc => {
-      const data = doc.data();
-      document.getElementById('abbr').value = data.abbr;
-      document.getElementById('label').value = data.label;
-      document.getElementById('typeSelect').value = data.type;
-      document.getElementById('text').value = data.tooltip;
-      document.getElementById('link').value = data.link || '';
-    });
+// Page selection dropdown
+const pageSelector = document.getElementById('pageSelector');
+const newPageFields = document.getElementById('newPageFields');
+
+// Show new page fields if "Create New Page" is selected
+pageSelector.addEventListener('change', (e) => {
+  const selectedPage = e.target.value;
+  if (selectedPage === 'createNewPage') {
+    newPageFields.style.display = 'block';
+    document.getElementById('pageTitle').disabled = true;  // Disable default title input
+    document.getElementById('pageSubtitle').disabled = true;  // Disable default subtitle input
+  } else {
+    newPageFields.style.display = 'none';
+    document.getElementById('pageTitle').disabled = false;  // Enable default title input
+    document.getElementById('pageSubtitle').disabled = false;  // Enable default subtitle input
   }
 });
 
-// Form Submission
-form.addEventListener('submit', e => {
+// Handle form submission
+form.addEventListener('submit', (e) => {
   e.preventDefault();
-
   const data = new FormData(form);
+
   const abbr = data.get('abbr').toUpperCase();
   const label = data.get('label');
   const tooltip = data.get('text');
@@ -68,19 +61,39 @@ form.addEventListener('submit', e => {
   const newType = data.get('newType');
   const selectedType = data.get('typeSelect');
   const type = newType || selectedType;
-
+  
   // Ensure category (type) is selected
   if (!type) {
     alert('Please provide or select a filter (type).');
     return;
   }
 
-  // Check for existing element
+  // Handle page creation
+  let selectedPageId = pageSelector.value;
+  if (selectedPageId === 'createNewPage') {
+    // Create a new page
+    const newPageTitle = data.get('newPageTitle');
+    const newPageSubtitle = data.get('newPageSubtitle');
+
+    // Add new page to Firestore
+    db.collection('pages').add({
+      pageTitle: newPageTitle,
+      pageSubtitle: newPageSubtitle,
+    })
+    .then(docRef => {
+      selectedPageId = docRef.id;
+      alert('New page created successfully!');
+    })
+    .catch((error) => {
+      console.error('Error adding page: ', error);
+    });
+  }
+
+  // Handle design element submission (new or update)
   const selectedElementId = elementSelector.value;
 
-  // Create or update element
   if (selectedElementId) {
-    // Update the existing element in Firestore
+    // Update existing element
     db.collection('designElements').doc(selectedElementId).update({
       abbr: abbr,
       label: label,
@@ -97,7 +110,7 @@ form.addEventListener('submit', e => {
       alert('Error updating design element.');
     });
   } else {
-    // Add a new design element to Firestore
+    // Add a new element
     db.collection('designElements').add({
       pageTitle: pageTitle,
       pageSubtitle: pageSubtitle,
@@ -106,7 +119,8 @@ form.addEventListener('submit', e => {
       category: type,
       tooltip: tooltip,
       link: link || null,
-      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      pageId: selectedPageId // Add reference to the selected page
     })
     .then(() => {
       alert('Design element added!');
