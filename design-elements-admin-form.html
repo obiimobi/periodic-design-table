@@ -65,15 +65,20 @@
     }
   </style>
 
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js"></script>
-
 
   
 </head>
 <body>
   <h1>Manage Design Elements</h1>
+  <!-- Include the Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <!-- Add other firebase services if needed -->
 
+  <!-- Your script that uses Firebase -->
+  <script src="design-elements-admin-form.js"></script>
+
+  
   <form id="designElementForm">
   <!-- Page Selection or Creation -->
   <div class="section-label">Select or Create Page</div>
