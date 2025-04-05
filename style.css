@@ -81,6 +81,7 @@ body {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: default;
   aspect-ratio: 1 / 1;
+  max-width: 128px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   /* Ensure element maintains square shape without affecting layout */
 }
