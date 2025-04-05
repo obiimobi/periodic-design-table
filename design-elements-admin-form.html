@@ -66,38 +66,45 @@
 </head>
 <body>
   <h1>Manage Design Elements</h1>
-  <form id="tileForm">
-    <!-- Dynamic Page Selection -->
-    <div class="section-label">Select or Create Page</div>
-    <select name="pageSelector" id="pageSelector" required>
-      <option value="">Select Page</option>
-      <!-- Pages will be added dynamically -->
-    </select><br><br>
+ <form id="designElementForm">
+  <!-- Page Selection or Creation -->
+  <div class="section-label">Select or Create Page</div>
+  <select name="pageSelector" id="pageSelector" required>
+    <option value="">Select Page</option>
+    <option value="createNewPage">Create New Page</option>
+    <!-- Dynamic pages will be added here -->
+  </select><br><br>
 
-    <input name="pageTitle" placeholder="Page Title (e.g., UX Design)" required />
-    <input name="pageSubtitle" placeholder="Page Subtitle (optional)" />
+  <!-- If "Create New Page" is selected, show the title and subtitle fields -->
+  <div id="newPageFields" style="display: none;">
+    <input name="newPageTitle" placeholder="New Page Title (e.g., UX Design)" required /><br><br>
+    <input name="newPageSubtitle" placeholder="New Page Subtitle (optional)" /><br><br>
+  </div>
 
-    <div class="section-label">Filters (Types)</div>
-    <input name="newType" placeholder="Add a new filter (e.g., Research)" />
-    <select name="typeSelect" id="typeSelect">
-      <option value="">Select existing filter</option>
-    </select>
+  <input name="pageTitle" placeholder="Page Title (e.g., UX Design)" required />
+  <input name="pageSubtitle" placeholder="Page Subtitle (optional)" /><br><br>
 
-    <div class="section-label">Element Details</div>
-    <input name="abbr" placeholder="Abbreviation (e.g., UX)" required />
-    <input name="label" placeholder="Label (e.g., User Experience)" required />
-    <textarea name="text" rows="3" placeholder="Tooltip text..." required></textarea>
-    <input name="link" placeholder="Read more link (optional)" />
+  <div class="section-label">Filters (Types)</div>
+  <input name="newType" placeholder="Add a new filter (e.g., Research)" />
+  <select name="typeSelect" id="typeSelect">
+    <option value="">Select existing filter</option>
+  </select>
 
-    <!-- Select an existing element to edit -->
-    <div class="section-label">Select Element to Edit</div>
-    <select id="elementSelector" name="elementSelector">
-      <option value="">Select an element</option>
-      <!-- Elements will be added dynamically -->
-    </select><br><br>
+  <div class="section-label">Element Details</div>
+  <input name="abbr" placeholder="Abbreviation (e.g., UX)" required />
+  <input name="label" placeholder="Label (e.g., User Experience)" required />
+  <textarea name="text" rows="3" placeholder="Tooltip text..." required></textarea>
+  <input name="link" placeholder="Read more link (optional)" />
 
-    <button type="submit">Save Element</button>
-  </form>
+  <!-- Select an existing element to edit -->
+  <div class="section-label">Select Element to Edit</div>
+  <select id="elementSelector" name="elementSelector">
+    <option value="">Select an element</option>
+    <!-- Elements will be added dynamically -->
+  </select><br><br>
+
+  <button type="submit">Save Element</button>
+</form>
 
   <h2>Page Preview</h2>
   <div id="pageInfo"></div>
